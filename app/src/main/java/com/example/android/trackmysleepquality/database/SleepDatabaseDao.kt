@@ -14,9 +14,48 @@
  * limitations under the License.
  */
 
+/**
+ * Step 2 - DAO
+ * Interface for performing CRUD operations on the Database
+ *
+ * Reference:
+ * 1. @Insert
+ * 2. @Delete
+ * 3. @Update
+ * 4. @Query - For any other operation
+ */
+
 package com.example.android.trackmysleepquality.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-interface SleepDatabaseDao
+interface SleepDatabaseDao {
+
+    @Insert
+    fun insert(night: SleepNight)
+
+    @Update
+    fun update(night: SleepNight)
+
+    // Retrieve a selected entry based on the provided Primary Key
+    @Query("SELECT * FROM daily_sleep_quality_table WHERE nightId = :key")
+    fun get(key: Long): SleepNight?
+
+    // It will delete all entries from the Table
+    @Query("DELETE FROM daily_sleep_quality_table")
+    fun clear()
+
+    // Get record of only tonight
+    @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
+    fun getTonight(): SleepNight?
+
+    // Get records of all nights
+    @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC")
+    fun getAllNights(): LiveData<List<SleepNight>>
+
+}
