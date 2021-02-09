@@ -39,20 +39,44 @@ abstract class SleepDatabase : RoomDatabase() {
     // then you are creating an instance of a class, therefore "instantiating" a class.
     companion object {
 
-        // @Volatile =
+        //
+        // @Volatile:
+        // Its value will never be cached, and all R/W tasks will be done from the main memory (RAM).
+        // This helps in avoiding opening multiple connections to database, thus improving app's performance
+        //
+        // INSTANCE:
+        // It means that to avoid any conflict, changes being made by "a thread" will be
+        // immediately visible to "other threads". So, only one thread can apply updates at a time.
+        //
         @Volatile
         private var INSTANCE: SleepDatabase? = null
 
-        //
+        // Required by "Database Builder"
         fun getInstance(context: Context): SleepDatabase {
 
-            //
+            // Allows only "one thread" to access this block at time, its purpose is same as
+            // mentioned before, that is to avoid any conflict between multiple threads
             synchronized(this) {
+
+                // We are here taking advantage of Kotlin's "smart cast" feature
+                // by copying the current value of INSTANCE to the LOCAL variable.
                 var instance = INSTANCE
 
-                //
+                // If no database with this name exists
                 if (instance == null) {
 
+                    // Create the database by using:
+                    // 1. Context
+                    // 2. Our DATABASE class (it has references to Table Structure & DAO/CRUD Operations)
+                    // 3. Desired NAME of the DATABASE
+                    //
+                    // Destroy & Rebuild data in the Table (MIGRATION STRATEGY)
+                    // To avoid type-mismatch error, we are using fallbackToDestructiveMigration
+                    // as our "Migration Strategy" to destroy and rebuild the database.
+                    //
+                    // Normally, we have to provide a "MIGRATION OBJECT", which will define how
+                    // all existing rows with the old schema should be converted to the
+                    // new rows based on the updated schema.
                     //
                     instance = Room.databaseBuilder(
                             context.applicationContext,
@@ -62,11 +86,11 @@ abstract class SleepDatabase : RoomDatabase() {
                             .fallbackToDestructiveMigration()
                             .build()
 
-                    //
+                    // Assign our LOCAL instance to the actual INSTANCE
                     INSTANCE = instance
                 }
 
-                //
+                // Final step
                 return instance
             }
 
