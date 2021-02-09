@@ -21,12 +21,22 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+
+/**
+ * entities = Database's Table structure (Refer to Step 1 in SleepNight.kt file)
+ * version = Whenever we change schema, then we will need to update the version
+ * exportSchema = To keep schema version history backups
+ */
 @Database(entities = [SleepNight::class], version = 1, exportSchema = false)
 abstract class SleepDatabase : RoomDatabase() {
 
-    //
+    // Reference to our DAO file (implementation of CRUD functions)
+    // Refer to Step 2 in SleepDatabaseDao.kt file
     abstract val sleepDatabaseDao: SleepDatabaseDao
 
+    // Allows clients to directly access methods (functions) for CRUD actions
+    // without "instantiating the class", means When you create an object,
+    // then you are creating an instance of a class, therefore "instantiating" a class.
     companion object {
 
         // @Volatile =
