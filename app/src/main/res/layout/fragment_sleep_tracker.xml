@@ -24,6 +24,11 @@
          click handlers, and state variables. -->
     <data>
 
+        <!-- setting up data binding to connect the ViewModel with the UI -->
+        <variable
+            name="sleepTrackerViewModel"
+            type="com.example.android.trackmysleepquality.sleeptracker.SleepTrackerViewModel" />
+
     </data>
 
     <!-- Start of the visible fragment layout using ConstraintLayout -->
