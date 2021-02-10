@@ -23,8 +23,14 @@ import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 /**
  * ViewModel for SleepTrackerFragment.
  */
+
+// AndroidViewModel(application) = ViewModel() but more POWERFUL
+// It takes the "application" context as a CONSTRUCTOR PARAMETER
+// and makes it available as a PROPERTY
 class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application) : AndroidViewModel(application) {
+
+
 }
 
