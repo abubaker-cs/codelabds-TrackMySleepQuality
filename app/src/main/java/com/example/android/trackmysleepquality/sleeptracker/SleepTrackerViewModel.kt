@@ -75,5 +75,36 @@ class SleepTrackerViewModel(
 
     }
 
-}
+    // Click handler for the Start button
+    //
+    // Logic:
+    // 1. Create a new SleepNight
+    // 2. Insert it into the database
+    // 3. Assign it to tonight
+    //
+    fun onStartTracking() {
 
+        // viewModelScope = Because we need this result to continue and update the UI
+        viewModelScope.launch {
+
+            // Create a new SleepNight
+            val newNight = SleepNight()
+
+            // Insert it into the database
+            insert(newNight)
+
+            // Assign it to tonight
+            tonight.value = getTonightFromDatabase()
+
+        }
+    }
+
+    // Suspend = To complete this task using coroutine
+    private suspend fun insert(night: SleepNight) {
+
+        // We are using DAO interface to insert night into the database
+        database.insert(night)
+
+    }
+
+}
