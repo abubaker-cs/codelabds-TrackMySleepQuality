@@ -19,9 +19,11 @@ package com.example.android.trackmysleepquality.sleeptracker
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
+import com.example.android.trackmysleepquality.formatNights
 import kotlinx.coroutines.launch
 
 /**
@@ -38,6 +40,16 @@ class SleepTrackerViewModel(
     // This variable will store the data for current night.
     // We will be using its type as MutableLiveData<>() because we want to OBSERVE and UPDATE it.
     private var tonight = MutableLiveData<SleepNight?>()
+
+    /**
+     * Get all nights, so the can be transformed and formatted for TextView
+     */
+    private val nights = database.getAllNights()
+
+    // We are using formatNights() function from Utils.kt file
+    val nightsString = Transformations.map(nights) { nights ->
+        formatNights(nights, application.resources)
+    }
 
     init {
         // We want to initialize tonight variable as soon as possible
@@ -66,7 +78,7 @@ class SleepTrackerViewModel(
 
         // If the start & end times are not same, then it means that the night has been already
         // completed, thus assign the "null" value to the night variable
-        if (night?.endTimeMill != night?.startTimeMilli) {
+        if (night?.endTimeMilli != night?.startTimeMilli) {
             night = null
         }
 
