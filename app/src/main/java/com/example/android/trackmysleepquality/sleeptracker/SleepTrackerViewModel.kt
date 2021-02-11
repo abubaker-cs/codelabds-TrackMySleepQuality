@@ -82,6 +82,9 @@ class SleepTrackerViewModel(
     // 2. Insert it into the database
     // 3. Assign it to tonight
     //
+    // Connect this function to the Start Button in Fragment file using:
+    // android:onClick="@{() -> sleepTrackerViewModel.onStartTracking()}"
+    //
     fun onStartTracking() {
 
         // viewModelScope = Because we need this result to continue and update the UI
