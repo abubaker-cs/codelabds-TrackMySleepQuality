@@ -35,33 +35,45 @@ class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application) : AndroidViewModel(application) {
 
-
+    // This variable will store the data for current night.
+    // We will be using its type as MutableLiveData<>() because we want to OBSERVE and UPDATE it.
     private var tonight = MutableLiveData<SleepNight?>()
 
     init {
+        // We want to initialize tonight variable as soon as possible
         initializeTonight()
     }
 
     private fun initializeTonight() {
 
+        // We will start a coroutine in ViewModelScope
+        // Note: We are using lambda expressions (it is a function with any name)
         viewModelScope.launch {
+
+            // We will fetch and store the value for tonight from the database
             tonight.value = getTonightFromDatabase()
+
         }
 
     }
 
+    // It will return a nullable SleepNight,
+    // if there is nothing then it will return an error because the function has to return something
     private suspend fun getTonightFromDatabase(): SleepNight? {
 
+        // Get the newest night from the database
         var night = database.getTonight()
 
+        // If the start & end times are not same, then it means that the night has been already
+        // completed, thus assign the "null" value to the night variable
         if (night?.endTimeMill != night?.startTimeMilli) {
             night = null
         }
 
+        // return final state of the night, as it can be null or actual data
         return night
 
     }
-
 
 }
 
