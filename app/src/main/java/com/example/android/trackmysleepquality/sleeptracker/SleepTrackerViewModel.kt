@@ -17,10 +17,7 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.formatNights
@@ -36,6 +33,12 @@ import kotlinx.coroutines.launch
 class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application) : AndroidViewModel(application) {
+
+    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+
+    val navigateToSleepQuality: LiveData<SleepNight>
+        get() = _navigateToSleepQuality
+
 
     // This variable will store the data for current night.
     // We will be using its type as MutableLiveData<>() because we want to OBSERVE and UPDATE it.
@@ -87,7 +90,7 @@ class SleepTrackerViewModel(
 
     }
 
-    // Click handler for the Start button
+    // Click handler: Start button
     //
     // Logic:
     // 1. Create a new SleepNight
@@ -114,12 +117,52 @@ class SleepTrackerViewModel(
         }
     }
 
+    /**
+     * Click handler: Stop Button
+     */
+    fun onStopTracking() {
+        viewModelScope.launch {
+            val oldNight = tonight.value ?: return@launch
+            oldNight.endTimeMilli = System.currentTimeMillis()
+            update(oldNight)
+
+            _navigateToSleepQuality.value = oldNight
+        }
+    }
+
+    // Click handler: Cleaar
+    fun onClear() {
+        viewModelScope.launch {
+            clear()
+            tonight.value = null
+        }
+    }
+
+    // INSERT
     // Suspend = To complete this task using coroutine
     private suspend fun insert(night: SleepNight) {
 
         // We are using DAO interface to insert night into the database
         database.insert(night)
 
+    }
+
+    // UPDATE
+    private suspend fun update(night: SleepNight) {
+
+        //
+        database.update(night)
+
+    }
+
+    // CLEAR
+    private suspend fun clear() {
+        //
+        database.clear()
+    }
+
+    fun doneNavigation() {
+        _navigateToSleepQuality.value = null
     }
 
 }
