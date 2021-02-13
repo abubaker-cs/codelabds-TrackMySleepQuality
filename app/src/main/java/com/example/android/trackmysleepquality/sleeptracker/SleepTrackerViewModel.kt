@@ -17,6 +17,7 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.app.Application
+import android.view.animation.Transformation
 import androidx.lifecycle.*
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
@@ -163,6 +164,25 @@ class SleepTrackerViewModel(
 
     fun doneNavigation() {
         _navigateToSleepQuality.value = null
+    }
+
+    /**
+     * Logically handling buttons states
+     */
+
+    // Start
+    val startButtonVisible = Transformations.map(tonight) {
+        it == null
+    }
+
+    // Stop
+    val stopButtonVisible = Transformations.map(tonight) {
+        it != null
+    }
+
+    // Clear
+    val clearButtonVisible = Transformations.map(nights) {
+        it?.isNotEmpty()
     }
 
 }
