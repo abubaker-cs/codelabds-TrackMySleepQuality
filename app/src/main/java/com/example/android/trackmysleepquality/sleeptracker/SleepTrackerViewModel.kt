@@ -171,6 +171,10 @@ class SleepTrackerViewModel(
 
     /**
      * Logically handling buttons states
+     *
+     * android:enabled="@{sleepTrackerViewModel.***}"
+     *
+     *
      */
 
     // Start

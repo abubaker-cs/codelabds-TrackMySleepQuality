@@ -68,6 +68,15 @@
              from the ViewModel. The click handler is in the ViewModel as well, and
              you can set it for the Views using this lambda pattern. -->
 
+        <!--
+            Since we want to logically show buttons on the screen, thus we will be using :enabled
+            parameter to decided when to enable or disable button by connecting them to respected
+            methods defined in the ViewModel file :
+            1. Start Button > startButtonVisible()
+            2. Stop Button  > stopButtonVisible()
+            3. Clear Button > clearButtonVisible()
+         -->
+
         <Button
             android:id="@+id/start_button"
             style="@style/SleepButtons"
