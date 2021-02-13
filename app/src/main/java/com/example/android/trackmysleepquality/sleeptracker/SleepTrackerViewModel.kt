@@ -137,7 +137,7 @@ class SleepTrackerViewModel(
             clear()
             tonight.value = null
 
-            // For snackbar
+            // Display the snackbar after clearing the database record
             _showSnackbarEvent.value = true
         }
     }
@@ -170,30 +170,39 @@ class SleepTrackerViewModel(
     }
 
     /**
-     * Logically handling buttons states
+     * By using the following snippet we are connecting our following methods with the buttons in the
+     * XML file to logically handling buttons states:
      *
      * android:enabled="@{sleepTrackerViewModel.***}"
      *
-     *
+     * 1. startButtonVisible
+     * 2. stopButtonVisible
+     * 3. clearButtonVisible
      */
 
-    // Start
+    // Start - It should be enabled when tonight is null
     val startButtonVisible = Transformations.map(tonight) {
         it == null
     }
 
-    // Stop
+    // Stop - It should be enabled when tonight is NOT null
     val stopButtonVisible = Transformations.map(tonight) {
         it != null
     }
 
-    // Clear
+    // Clear - It should be ONLY enabled when database contains records for sleep nights.
     val clearButtonVisible = Transformations.map(nights) {
         it?.isNotEmpty()
     }
 
     /**
      * Encapsulated Event for snackbar
+     *
+     * After the user clears the database, show the user a confirmation using the Snackbar widget.
+     * Deciding when to show the snackbar happens in the ViewModel.
+     *
+     * Following code will trigger the navigation:
+     *
      */
     private var _showSnackbarEvent = MutableLiveData<Boolean>()
     val showSnackbarEvent: LiveData<Boolean>

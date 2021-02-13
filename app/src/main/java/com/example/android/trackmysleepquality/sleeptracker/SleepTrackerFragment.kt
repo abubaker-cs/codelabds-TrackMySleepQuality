@@ -88,12 +88,17 @@ class SleepTrackerFragment : Fragment() {
 
         })
 
-        // Snackbar
+        /**
+         * Snackbar: Showing the snackbar is a UI task, and it should happen in the Fragment.
+         * We are applying Observer to the showSnackbarEvent LiveData defined in the ViewModel.
+         *
+         *
+         */
         sleepTrackerViewModel.showSnackbarEvent.observe(viewLifecycleOwner, Observer {
 
+            // If the observe state is TRUE
             if (it == true) {
 
-                //
                 Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),
                         getString(R.string.cleared_message),
