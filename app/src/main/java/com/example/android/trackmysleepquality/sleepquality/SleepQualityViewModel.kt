@@ -34,14 +34,15 @@ class SleepQualityViewModel(
         private val sleepNightKey: Long = 0L,
         val database: SleepDatabaseDao) : ViewModel() {
 
-    //
+    // To navigate to the UI Controller (SleepTrackerFragment) using the same pattern as above, we will:
+    // 1. Declare _navigateToSleepTracker
+    // 2. Implement encapsulation for navigateToSleepTracker and
+    // 3. Set value using doneNavigating() method
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
 
-    //
     val navigateToSleepTracker: LiveData<Boolean?>
         get() = _navigateToSleepTracker
 
-    //
     fun doneNavigating() {
         _navigateToSleepTracker.value = null
     }
