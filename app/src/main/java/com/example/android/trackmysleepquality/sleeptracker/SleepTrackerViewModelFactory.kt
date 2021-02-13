@@ -29,6 +29,8 @@ import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 class SleepTrackerViewModelFactory(
 
         // It takes the SAME arguments as ViewModel but extend as ViewModelProvider.Factory
+        // 1. dataSource
+        // 2. application
         private val dataSource: SleepDatabaseDao,
         private val application: Application) : ViewModelProvider.Factory {
 
@@ -38,6 +40,8 @@ class SleepTrackerViewModelFactory(
 
         // It checks the existence of our class() and returns an INSTANCE of it
         if (modelClass.isAssignableFrom(SleepTrackerViewModel::class.java)) {
+            // 1. dataSource
+            // 2. application
             return SleepTrackerViewModel(dataSource, application) as T
         }
 

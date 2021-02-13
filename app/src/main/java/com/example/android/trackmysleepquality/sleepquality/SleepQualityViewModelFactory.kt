@@ -23,17 +23,29 @@ import java.lang.IllegalArgumentException
 
 /**
  * This class uses a version of the same boilerplate code we have seen before.
+ *
+ * Provides the SleepDatabaseDao and context to the ViewModel.
  */
 class SleepQualityViewModelFactory(
+
+        // It takes the SAME arguments as ViewModel but extend as ViewModelProvider.Factory
+        // 1. sleepNightKey
+        // 2. dataSource
         private val sleepNightKey: Long,
         private val dataSource: SleepDatabaseDao) : ViewModelProvider.Factory {
 
+    // override create(): It takes any class type as an argument and returns as ViewModel
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+
+        // It checks the existence of our class() and returns an INSTANCE of it
         if (modelClass.isAssignableFrom(SleepQualityViewModel::class.java)) {
+            // 1. sleepNightKey
+            // 2. dataSource
             return SleepQualityViewModel(sleepNightKey, dataSource) as T
         }
 
+        // Otherwise it throws an error
         throw  IllegalArgumentException("Unknown ViewModel Class")
 
     }
