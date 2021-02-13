@@ -136,6 +136,9 @@ class SleepTrackerViewModel(
         viewModelScope.launch {
             clear()
             tonight.value = null
+
+            // For snackbar
+            _showSnackbarEvent.value = true
         }
     }
 
@@ -183,6 +186,17 @@ class SleepTrackerViewModel(
     // Clear
     val clearButtonVisible = Transformations.map(nights) {
         it?.isNotEmpty()
+    }
+
+    /**
+     * Encapsulated Event for snackbar
+     */
+    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+    val showSnackbarEvent: LiveData<Boolean>
+        get() = _showSnackbarEvent
+
+    fun doneShowingSnackbar() {
+        _showSnackbarEvent.value = false
     }
 
 }
